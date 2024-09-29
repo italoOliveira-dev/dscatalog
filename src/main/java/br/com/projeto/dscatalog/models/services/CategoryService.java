@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.projeto.dscatalog.models.entities.Category;
 import br.com.projeto.dscatalog.models.repositories.CategoryRepository;
+import br.com.projeto.dscatalog.models.services.exceptions.EntityNotFoundException;
 import br.com.projeto.dscatalog.web.dto.CategoryResponseDTO;
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class CategoryService {
