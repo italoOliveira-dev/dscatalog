@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.projeto.dscatalog.models.services.CategoryService;
 import br.com.projeto.dscatalog.web.dto.CategoryCreateDTO;
 import br.com.projeto.dscatalog.web.dto.CategoryResponseDTO;
+import br.com.projeto.dscatalog.web.dto.CategoryUpdateDTO;
 
 @RestController
 @RequestMapping("/categories")
@@ -45,5 +47,12 @@ public class CategoryController {
     List<CategoryResponseDTO> list = categoryService.findAll();
 
     return ResponseEntity.ok(list);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<CategoryResponseDTO> update(@PathVariable Long id, @RequestBody CategoryUpdateDTO dto) {
+    CategoryResponseDTO category = categoryService.updateCategory(id, dto);
+
+    return ResponseEntity.ok(category);
   }
 }

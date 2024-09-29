@@ -10,6 +10,7 @@ import br.com.projeto.dscatalog.models.repositories.CategoryRepository;
 import br.com.projeto.dscatalog.models.services.exceptions.EntityNotFoundException;
 import br.com.projeto.dscatalog.web.dto.CategoryCreateDTO;
 import br.com.projeto.dscatalog.web.dto.CategoryResponseDTO;
+import br.com.projeto.dscatalog.web.dto.CategoryUpdateDTO;
 
 @Service
 public class CategoryService {
@@ -36,5 +37,14 @@ public class CategoryService {
 
   public CategoryResponseDTO getCategory(Long id) {
     return CategoryResponseDTO.fromCategory(getById(id));
+  }
+
+  @Transactional
+  public CategoryResponseDTO updateCategory(Long id, CategoryUpdateDTO dto) {
+    Category entity = getById(id);
+    entity.setName(dto.name());
+    categoryRepository.save(entity);
+
+    return CategoryResponseDTO.fromCategory(entity);
   }
 }
