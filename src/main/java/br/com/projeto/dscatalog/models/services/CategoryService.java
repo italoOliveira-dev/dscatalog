@@ -2,11 +2,14 @@ package br.com.projeto.dscatalog.models.services;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.projeto.dscatalog.models.entities.Category;
 import br.com.projeto.dscatalog.models.repositories.CategoryRepository;
+import br.com.projeto.dscatalog.models.services.exceptions.DataBaseException;
 import br.com.projeto.dscatalog.models.services.exceptions.EntityNotFoundException;
 import br.com.projeto.dscatalog.web.dto.CategoryCreateDTO;
 import br.com.projeto.dscatalog.web.dto.CategoryResponseDTO;
@@ -46,5 +49,14 @@ public class CategoryService {
     categoryRepository.save(entity);
 
     return CategoryResponseDTO.fromCategory(entity);
+  }
+
+  @Transactional(propagation = Propagation.SUPPORTS)
+  public void deleteCategory(Long id) {
+    try {
+      categoryRepository.delete(getById(id));
+    } catch(DataIntegrityViolationException e) {
+      throw new DataBaseException("Violção de integridade do banco de dados.");
+    }
   }
 }

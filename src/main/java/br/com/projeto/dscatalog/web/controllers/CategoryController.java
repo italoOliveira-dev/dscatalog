@@ -4,7 +4,9 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,5 +56,14 @@ public class CategoryController {
     CategoryResponseDTO category = categoryService.updateCategory(id, dto);
 
     return ResponseEntity.ok(category);
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+    categoryService.deleteCategory(id);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Message", String.format("Category com id %s foi deletado com sucesso", id));
+    return ResponseEntity.noContent().headers(headers).build();
   }
 }
