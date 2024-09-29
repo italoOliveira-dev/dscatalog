@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.com.projeto.dscatalog.models.services.exceptions.DataBaseException;
 import br.com.projeto.dscatalog.models.services.exceptions.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,17 @@ public class HandlerApiExceptions {
   public ResponseEntity<MessageError> entityNotFoundException(EntityNotFoundException ex, HttpServletRequest request) {
     HttpStatus status = HttpStatus.NOT_FOUND;
     
+    log.error("Error - ", ex);
+    return ResponseEntity
+          .status(status)
+          .contentType(MediaType.APPLICATION_JSON)
+          .body(new MessageError(request, status, ex.getMessage()));
+  }
+
+  @ExceptionHandler(DataBaseException.class)
+  public ResponseEntity<MessageError> dataBaseException(DataBaseException ex, HttpServletRequest request) {
+    HttpStatus status = HttpStatus.BAD_REQUEST;
+
     log.error("Error - ", ex);
     return ResponseEntity
           .status(status)
